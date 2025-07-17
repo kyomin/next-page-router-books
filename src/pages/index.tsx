@@ -3,14 +3,15 @@ import style from "./index.module.css";
 import { ReactNode } from "react";
 
 import BookItem from "@/components/book-item";
-import { InferGetServerSidePropsType } from "next";
+import { InferGetStaticPropsType } from "next";
 import fetchBooks from "@/lib/fetch-books";
 import fetchRandomBooks from "@/lib/fetch-random-books";
 
-// getServerSideProps 약속된 메서드명.
-// 이렇게 선언 후, export하면 SSR 선언!
-// 컴포넌트보다 먼저 실행되어서, 컴포넌트에 필요한 데이터를 불러오는 메서드.
-export const getServerSideProps = async () => {
+// getStaticProps 약속된 메서드명.
+// 이렇게 선언 후, export하면 SSG 선언!
+export const getStaticProps = async () => {
+  console.log("Index Page");
+
   const [allBooks, recoBooks] = await Promise.all([
     fetchBooks(),
     fetchRandomBooks(),
@@ -24,7 +25,7 @@ export const getServerSideProps = async () => {
 export default function Home({
   allBooks,
   recoBooks,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+}: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <div className={style.container}>
       <section>
