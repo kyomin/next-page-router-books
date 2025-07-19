@@ -2,6 +2,7 @@ import { GetServerSidePropsContext, InferGetStaticPropsType } from "next";
 import style from "./[id].module.css";
 import fetchBook from "@/lib/fetch-book";
 import { useRouter } from "next/router";
+import Head from "next/head";
 
 export const getStaticPaths = () => {
   return {
@@ -31,8 +32,22 @@ export default function Page({
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   const router = useRouter();
 
+  // fallback 상태에 있을 때에도 기본 메타 태그 설정을 한다.
   if (router.isFallback) {
-    return "로딩 중입니다...";
+    return (
+      <>
+        <Head>
+          <title>Kyomin Books</title>
+          <meta property="og:image" content="/thumbnail.png" />
+          <meta property="og:title" content="Kyomin Books" />
+          <meta
+            property="og:description"
+            content="Kyomin Books에 등록된 도서들을 만나보세요"
+          />
+        </Head>
+        <div>로딩 중입니다...</div>
+      </>
+    );
   }
 
   if (!book) {
@@ -42,24 +57,32 @@ export default function Page({
   const { title, subTitle, description, author, publisher, coverImgUrl } = book;
 
   return (
-    <div className={style.container}>
-      {/* Cover Image */}
-      <div
-        className={style.coverImgContainer}
-        style={{ backgroundImage: `url('${coverImgUrl}')` }}
-      >
-        <img src={coverImgUrl} />
+    <>
+      <Head>
+        <title>{title}</title>
+        <meta property="og:image" content={coverImgUrl} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+      </Head>
+      <div className={style.container}>
+        {/* Cover Image */}
+        <div
+          className={style.coverImgContainer}
+          style={{ backgroundImage: `url('${coverImgUrl}')` }}
+        >
+          <img src={coverImgUrl} />
+        </div>
+        {/* Title */}
+        <div className={style.title}>{title}</div>
+        {/* Sub Title */}
+        <div className={style.subTitle}>{subTitle}</div>
+        {/* Author */}
+        <div className={style.author}>
+          {author} | {publisher}
+        </div>
+        {/* Description */}
+        <div className={style.description}>{description}</div>
       </div>
-      {/* Title */}
-      <div className={style.title}>{title}</div>
-      {/* Sub Title */}
-      <div className={style.subTitle}>{subTitle}</div>
-      {/* Author */}
-      <div className={style.author}>
-        {author} | {publisher}
-      </div>
-      {/* Description */}
-      <div className={style.description}>{description}</div>
-    </div>
+    </>
   );
 }
