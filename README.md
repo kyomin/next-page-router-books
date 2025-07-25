@@ -42,3 +42,24 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 ## Vercel 배포 서버 도메인
 
 https://next-page-router-books-app.vercel.app/
+
+## Page Router의 장점
+
+### 파일 시스템 기반의 간편한 페이지 라우팅 제공
+
+- `pages/` 폴더 하위 경로로 페이지 라우팅 설정 가능
+
+### 다양한 방식의 사전 렌더링 제공
+
+- 서버 사이드 렌더링(SSR)
+  - 요청이 들어올 때 마다 사전 렌더링을 진행 함
+- 정적 사이트 생성(SSG)
+  - 빌드 타임에 미리 페이지를 사전 렌더링 해 둠
+- 증분 정적 재생성(ISR)
+  - SSG 페이지 일정 시간마다 재생성
+
+## Page Router의 단점
+
+- 페이지별 레이아웃 설정이 번거롭다.
+- 데이터 페칭이 페이지 컴포넌트에 집중된다.
+- 불필요한 컴포넌트들(인터랙션이 불필요한 컴포넌트들)도 JS Bundle(하이드레이션을 위한 자바스크립트 번들)에 포함된다.
